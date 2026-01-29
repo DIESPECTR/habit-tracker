@@ -231,14 +231,14 @@ const HabitStore = {
         return new Date(y, m - 1, d); // Local midnight
     },
     
-    // Get heatmap data for year (starting Jan 1, 2026)
+    // Get heatmap data for year (dynamic start)
     getYearHeatmap() {
         const habits = this.getAll();
         const todayStr = this.getTodayStr();
         const today = this.strToDate(todayStr);
         
-        // Start from Jan 1, 2026
-        const startDate = new Date(2026, 0, 1);
+        // Start from Jan 1 of current year
+        const startDate = new Date(today.getFullYear(), 0, 1);
         
         const data = {};
         const current = new Date(startDate);
@@ -251,7 +251,7 @@ const HabitStore = {
             const iterStr = `${iterYear}-${iterMonth}-${iterDay}`;
             
             const total = habits.length;
-            const done = habits.filter(h => h.logs[iterStr]).length;
+            const done = habits.filter(h => h.logs && h.logs[iterStr]).length;
             
             let level = 0;
             if (total > 0) {
@@ -277,7 +277,8 @@ const HabitStore = {
         const todayStr = this.getTodayStr();
         const today = this.strToDate(todayStr);
         
-        const startDate = new Date(2026, 0, 1); 
+        // Dynamic start date (Jan 1 of current year)
+        const startDate = new Date(today.getFullYear(), 0, 1); 
         const data = { dates: [], series: [] };
         
         const actualDays = Math.ceil((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
@@ -304,7 +305,7 @@ const HabitStore = {
         
         habits.forEach(habit => {
             const values = data.dates.map(dateStr => {
-                return habit.logs[dateStr] ? 1 : 0;
+                return (habit.logs && habit.logs[dateStr]) ? 1 : 0;
             });
             
             const rolling = values.map((_, i) => {
