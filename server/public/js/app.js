@@ -430,6 +430,39 @@ const App = {
     },
 
     render() {
+        const habits = HabitStore.getAll();
+        
+        // --- ONBOARDING LOGIC ---
+        if (!habits || habits.length === 0) {
+            // Hide main sections
+            ['today-section', 'log-section', 'habits-section'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            
+            // Show onboarding
+            const onboarding = document.getElementById('onboarding-section');
+            if (onboarding) {
+                onboarding.style.display = 'flex';
+                // Attach event if not already attached (simple check)
+                const btnStart = document.getElementById('btn-start-onboarding');
+                if (btnStart) {
+                    btnStart.onclick = () => {
+                        this.vibrate();
+                        this.openHabitModal();
+                    };
+                }
+            }
+            return; // Stop rendering the rest
+        }
+        
+        // If habits exist -> Show main app, hide onboarding
+        ['today-section', 'log-section', 'habits-section'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'block'; // Or flex/block depending on css, usually block for sections
+        });
+        document.getElementById('onboarding-section').style.display = 'none';
+
         try {
             this.renderHabits();
         } catch (e) {

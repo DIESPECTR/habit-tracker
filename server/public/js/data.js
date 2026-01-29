@@ -377,38 +377,12 @@ const HabitStore = {
         this.sync();
     },
     
-    // Load demo data
+    // Load demo data - DISABLED / CLEARED for Onboarding
     loadDemo() {
-        const today = new Date();
-        const startDate = new Date(today.getFullYear(), 0, 1); // Jan 1st of current year
-        const habits = [
-            { name: 'Reading', icon: '📚', color: '#2997FF', frequency: 'daily', goalPerWeek: 7 },
-            { name: 'Gym', icon: '🏋️', color: '#FF375F', frequency: 'weekly', goalPerWeek: 3 },
-            { name: 'Vitamins', icon: '🍊', color: '#32D74B', frequency: 'daily', goalPerWeek: 7 },
-            { name: 'Journal', icon: '📝', color: '#BF5AF2', frequency: 'daily', goalPerWeek: 7 },
-            { name: 'Swimming', icon: '🏊', color: '#64D2FF', frequency: 'weekly', goalPerWeek: 2 }
-        ];
-        
-        const demoHabits = habits.map(h => {
-            const habit = {
-                id: crypto.randomUUID(),
-                ...h,
-                createdAt: startDate.toISOString(),
-                logs: {}
-            };
-            
-            const current = new Date(startDate);
-            while (current <= today) {
-                const dateStr = this.dateToStr(current);
-                const chance = h.frequency === 'daily' ? 0.7 : 0.4;
-                if (Math.random() < chance) {
-                    habit.logs[dateStr] = true;
-                }
-                current.setDate(current.getDate() + 1);
-            }
-            return habit;
-        });
-        
-        this.saveAll(demoHabits);
+        // Just reload to clear if needed, or do nothing.
+        // User requested removing auto-generated demo items.
+        // We will keep the method empty to prevent accidental load.
+        this.saveAll([]); // Clear all habits
+        window.location.reload();
     }
 };

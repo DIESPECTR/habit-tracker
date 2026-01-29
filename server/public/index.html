@@ -37,7 +37,7 @@
         </header>
 
         <!-- Today's Progress -->
-        <section class="today-section">
+        <section class="today-section" id="today-section">
             <div class="today-header">
                 <span class="today-date" id="today-date">Today</span>
                 <span class="today-progress" id="today-progress">0/0</span>
@@ -51,8 +51,54 @@
             </div>
         </section>
 
+        <!-- Onboarding Section (Shown when 0 habits) -->
+        <section class="onboarding-section" id="onboarding-section" style="display: none;">
+            <div class="onboarding-content">
+                <div class="onboarding-visual">
+                    <!-- CSS-only Fake UI Preview -->
+                    <div class="preview-card">
+                        <div class="preview-chart">
+                            <svg viewBox="0 0 100 40" class="preview-wave">
+                                <path d="M0 30 C 20 30, 20 10, 40 15 C 60 20, 70 5, 100 10 V 40 H 0 Z" fill="url(#grad1)" fill-opacity="0.2"></path>
+                                <path d="M0 30 C 20 30, 20 10, 40 15 C 60 20, 70 5, 100 10" stroke="#2997FF" stroke-width="2" fill="none"></path>
+                                <defs>
+                                    <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#2997FF;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#2997FF;stop-opacity:0" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="preview-list">
+                            <div class="preview-row">
+                                <div class="preview-icon">📚</div>
+                                <div class="preview-line"></div>
+                                <div class="preview-check">✓</div>
+                            </div>
+                            <div class="preview-row">
+                                <div class="preview-icon">🏃</div>
+                                <div class="preview-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="onboarding-title">Start Your Orbit</h2>
+                <p class="onboarding-desc">
+                    1. <strong>Add Habits</strong> you want to build.<br>
+                    2. <strong>Check-in</strong> daily to track progress.<br>
+                    3. Watch your <strong>Effectiveness Trend</strong> rise.
+                </p>
+
+                <button class="btn btn-primary btn-large" id="btn-start-onboarding">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Create First Habit
+                </button>
+            </div>
+        </section>
+
         <!-- Log Section (Chart + Calendar) - Moved Up -->
-        <section class="log-section">
+        <section class="log-section" id="log-section">
             <div class="log-tabs" id="log-tabs">
                 <button class="log-tab active" data-view="chart">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 6l-9.5 9.5-5-5L1 18"></path><path d="M17 6h6v6"></path></svg>
