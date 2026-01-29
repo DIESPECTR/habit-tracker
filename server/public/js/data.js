@@ -459,12 +459,22 @@ const HabitStore = {
         window.location.reload();
     },
     
-    // Load demo data - DISABLED / CLEARED for Onboarding
+    // Load demo data
     loadDemo() {
-        // Just reload to clear if needed, or do nothing.
-        // User requested removing auto-generated demo items.
-        // We will keep the method empty to prevent accidental load.
-        this.saveAll([]); // Clear all habits
+        const habits = [
+            { name: 'Reading', icon: 'reading', color: '#2997FF', frequency: 'daily', goalPerWeek: 7, logs: {} },
+            { name: 'Morning Run', icon: 'activity', color: '#FF375F', frequency: 'weekly', goalPerWeek: 3, logs: {} },
+            { name: 'Drink Water', icon: 'water', color: '#64D2FF', frequency: 'daily', goalPerWeek: 7, logs: {} },
+            { name: 'Meditation', icon: 'meditate', color: '#BF5AF2', frequency: 'daily', goalPerWeek: 7, logs: {} }
+        ];
+        
+        // Add IDs
+        habits.forEach(h => {
+            h.id = crypto.randomUUID();
+            h.createdAt = new Date().toISOString();
+        });
+        
+        this.saveAll(habits);
         window.location.reload();
     }
 };

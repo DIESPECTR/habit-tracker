@@ -152,11 +152,6 @@ const App = {
             });
         }
 
-        // Load demo if no data
-        if (HabitStore.getAll().length === 0) {
-            HabitStore.loadDemo();
-        }
-        
         // Auto-fix: Migrate to Neon Palette (One-time)
         if (!localStorage.getItem('migrated_neon_palette_v2')) {
             const habits = HabitStore.getAll();
