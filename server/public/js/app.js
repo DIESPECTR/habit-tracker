@@ -448,6 +448,16 @@ const App = {
         }, { threshold: 0.5, root: slides.parentElement });
         
         Array.from(slides.children).forEach(slide => this.onboardingObserver.observe(slide));
+        
+        // Add click events to dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                this.vibrate();
+                if (slides.children[index]) {
+                    slides.children[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            });
+        });
     },
 
     render() {

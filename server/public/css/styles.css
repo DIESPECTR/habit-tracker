@@ -875,7 +875,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0; /* Full width */
+    padding: 0;
     min-height: 70vh;
     background: radial-gradient(circle at 50% 50%, rgba(10, 132, 255, 0.05) 0%, transparent 60%);
 }
@@ -886,7 +886,7 @@ body {
     margin: 0 auto;
     overflow: hidden;
     position: relative;
-    padding-bottom: 40px; /* Space for dots */
+    padding-bottom: 40px;
 }
 
 .onboarding-slides {
@@ -895,6 +895,8 @@ body {
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x; /* Critical for smooth swipe */
+    user-select: none; /* Prevent text selection during swipe */
 }
 
 .onboarding-slides::-webkit-scrollbar {
@@ -911,13 +913,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    opacity: 0.4;
-    transform: scale(0.9);
-    transition: all 0.5s ease;
-}
-
-/* Active slide effect handled by IntersectionObserver in JS, but default behavior: */
-.onboarding-slide {
+    /* Removed default opacity/scale logic to prevent conflict */
     opacity: 1;
     transform: scale(1);
 }
@@ -940,22 +936,25 @@ body {
 
 /* Preview Cards */
 .preview-card {
-    background: rgba(28, 28, 30, 0.8);
-    backdrop-filter: blur(20px);
+    background: #1c1c1e; /* Solid fallback for performance */
+    background: rgba(28, 28, 30, 0.95); /* High opacity, no blur */
+    /* backdrop-filter: blur(20px);  <-- KILLS PERFORMANCE, REMOVED */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     width: 100%;
     max-width: 260px;
     padding: 0;
     overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4); /* Simplified shadow */
     margin-bottom: 10px;
-    transform: perspective(1000px) rotateX(5deg); /* 3D effect */
-    transition: transform 0.5s;
+    /* Simplified 3D transform */
+    transform: perspective(1000px) rotateX(2deg); 
+    transition: transform 0.3s;
+    will-change: transform; /* Hint for browser */
 }
 
 .onboarding-slide:nth-child(2) .preview-card {
-    transform: perspective(1000px) rotateY(-5deg);
+    transform: perspective(1000px) rotateY(-2deg);
 }
 
 .preview-header {
