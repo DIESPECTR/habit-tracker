@@ -35,7 +35,13 @@ body {
     min-height: 100vh;
 }
 
-/* --- Animations --- */
+/* Utility to lock scroll */
+body.no-scroll {
+    overflow: hidden !important;
+    touch-action: none; /* Disable touch gestures on body */
+}
+
+/* ... Animations ... */
 @keyframes fadeInUp {
     from {
         opacity: 0;

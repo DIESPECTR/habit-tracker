@@ -233,19 +233,23 @@ const App = {
         // Settings button
         document.getElementById('btn-settings').addEventListener('click', () => {
             this.vibrate();
+            document.body.classList.add('no-scroll'); // Lock scroll
             document.getElementById('settings-modal').classList.add('active');
         });
         
         // Modal close buttons
         document.getElementById('modal-close').addEventListener('click', () => {
+            document.body.classList.remove('no-scroll'); // Unlock scroll
             document.getElementById('habit-modal').classList.remove('active');
         });
         
         document.getElementById('settings-close').addEventListener('click', () => {
+            document.body.classList.remove('no-scroll'); // Unlock scroll
             document.getElementById('settings-modal').classList.remove('active');
         });
         
         document.getElementById('day-modal-close').addEventListener('click', () => {
+            document.body.classList.remove('no-scroll'); // Unlock scroll
             document.getElementById('day-modal').classList.remove('active');
         });
         
@@ -868,6 +872,9 @@ const App = {
         const title = document.getElementById('modal-title');
         const form = document.getElementById('habit-form');
         const deleteBtn = document.getElementById('btn-delete-habit');
+        
+        // Lock scroll
+        document.body.classList.add('no-scroll');
         
         form.reset();
         document.getElementById('habit-id').value = '';
