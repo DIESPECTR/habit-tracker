@@ -430,12 +430,32 @@ const App = {
     },
 
     render() {
-        this.renderHabits();
-        this.renderTodayProgress();
-        this.renderCalendar();
+        try {
+            this.renderHabits();
+        } catch (e) {
+            console.error('Error rendering habits:', e);
+        }
+
+        try {
+            this.renderTodayProgress();
+        } catch (e) {
+            console.error('Error rendering today progress:', e);
+        }
+
+        try {
+            this.renderCalendar();
+        } catch (e) {
+            console.error('Error rendering calendar:', e);
+        }
         
-        // Defer chart rendering to ensure DOM layout is stable (fixes disappearing chart)
-        requestAnimationFrame(() => this.renderChart());
+        // Defer chart rendering to ensure DOM layout is stable
+        requestAnimationFrame(() => {
+            try {
+                this.renderChart();
+            } catch (e) {
+                console.error('Error rendering chart:', e);
+            }
+        });
     },
 
     renderTodayProgress() {
@@ -468,7 +488,7 @@ const App = {
         }
 
         // Filter habits relevant for today
-        const doneCount = habits.filter(h => h.logs[today]).length;
+        const doneCount = habits.filter(h => h.logs && h.logs[today]).length;
         const totalCount = habits.length;
         
         // Update header stats
@@ -484,15 +504,18 @@ const App = {
                 </div>
             `;
             // Add click listener to the empty state to open create modal
-            container.querySelector('.today-habit-pill.empty').addEventListener('click', () => {
-                this.vibrate();
-                this.openHabitModal();
-            });
+            const emptyPill = container.querySelector('.today-habit-pill.empty');
+            if (emptyPill) {
+                emptyPill.addEventListener('click', () => {
+                    this.vibrate();
+                    this.openHabitModal();
+                });
+            }
             return;
         }
 
         container.innerHTML = habits.map(habit => {
-            const isDone = habit.logs[today];
+            const isDone = habit.logs && habit.logs[today];
             const svgIcon = getIconSvg(habit.icon); // Use SVG helper
             return `
                 <div class="today-habit-pill ${isDone ? 'done' : ''}" 

@@ -379,7 +379,7 @@ const HabitStore = {
     // Load demo data
     loadDemo() {
         const today = new Date();
-        const startDate = new Date(2026, 0, 1); // Jan 1, 2026
+        const startDate = new Date(today.getFullYear(), 0, 1); // Jan 1st of current year
         const habits = [
             { name: 'Reading', icon: '📚', color: '#2997FF', frequency: 'daily', goalPerWeek: 7 },
             { name: 'Gym', icon: '🏋️', color: '#FF375F', frequency: 'weekly', goalPerWeek: 3 },
