@@ -651,6 +651,9 @@ body.no-scroll {
 .modal-content {
     background: var(--bg-card); width: 90%; max-width: 400px;
     border-radius: 20px; padding: 20px; border: 1px solid var(--border);
+    max-height: 85vh; /* Prevent modal from being taller than screen */
+    overflow-y: auto; /* Allow scrolling inside modal */
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
 }
 .modal-header {
     display: flex; justify-content: space-between; margin-bottom: 20px;
