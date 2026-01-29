@@ -645,15 +645,17 @@ body.no-scroll {
 /* --- Modals --- */
 .modal {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-    align-items: center; justify-content: center; z-index: 1000;
+    align-items: center; justify-content: center; z-index: 2000; /* Increased Z-Index */
 }
 .modal.active { display: flex; }
 .modal-content {
     background: var(--bg-card); width: 90%; max-width: 400px;
     border-radius: 20px; padding: 20px; border: 1px solid var(--border);
-    max-height: 85vh; /* Prevent modal from being taller than screen */
-    overflow-y: auto; /* Allow scrolling inside modal */
-    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+    max-height: 75dvh; /* Reduce height to be safer on mobile screens */
+    overflow-y: auto; /* Allow scrolling */
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 80px; /* Huge padding to ensure buttons are reachable */
+    overscroll-behavior: contain; /* Prevent scroll chaining to background */
 }
 .modal-header {
     display: flex; justify-content: space-between; margin-bottom: 20px;
@@ -805,9 +807,10 @@ body.no-scroll {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
     gap: 8px;
-    max-height: 200px;
+    max-height: 160px; /* Reduced from 200px to save vertical space */
     overflow-y: auto;
     padding-right: 4px;
+    overscroll-behavior: contain; /* Keep scroll inside grid */
 }
 
 .icon-option {
