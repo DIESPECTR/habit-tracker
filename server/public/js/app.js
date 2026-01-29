@@ -254,6 +254,7 @@ const App = {
         });
         
         document.getElementById('btn-cancel').addEventListener('click', () => {
+            document.body.classList.remove('no-scroll'); // Unlock scroll
             document.getElementById('habit-modal').classList.remove('active');
         });
 
@@ -262,6 +263,7 @@ const App = {
             const id = document.getElementById('habit-id').value;
             if (id && confirm('Delete this habit? This cannot be undone.')) {
                 HabitStore.delete(id);
+                document.body.classList.remove('no-scroll'); // Unlock scroll
                 document.getElementById('habit-modal').classList.remove('active');
                 this.render();
             }
@@ -305,6 +307,7 @@ const App = {
         document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
+                    document.body.classList.remove('no-scroll'); // Unlock scroll
                     modal.classList.remove('active');
                 }
             });
@@ -1042,6 +1045,7 @@ const App = {
             HabitStore.create(data);
         }
         
+        document.body.classList.remove('no-scroll'); // Unlock scroll
         document.getElementById('habit-modal').classList.remove('active');
         this.render();
     },
