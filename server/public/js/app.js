@@ -449,6 +449,22 @@ const App = {
                 slides.scrollBy({ left: slides.offsetWidth, behavior: 'smooth' });
             };
         }
+
+        // Add Keyboard Support
+        const keyHandler = (e) => {
+            if (document.getElementById('onboarding-section').style.display === 'none') return;
+            
+            if (e.key === 'ArrowRight') {
+                slides.scrollBy({ left: slides.offsetWidth, behavior: 'smooth' });
+            } else if (e.key === 'ArrowLeft') {
+                slides.scrollBy({ left: -slides.offsetWidth, behavior: 'smooth' });
+            }
+        };
+        
+        // Remove old listener if exists (to avoid duplicates on re-init)
+        document.removeEventListener('keydown', this._onboardingKeyHandler);
+        this._onboardingKeyHandler = keyHandler;
+        document.addEventListener('keydown', this._onboardingKeyHandler);
     },
 
     render() {
