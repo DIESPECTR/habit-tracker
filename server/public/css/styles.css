@@ -873,18 +873,20 @@ body {
 .onboarding-section {
     flex: 1;
     display: flex;
+    flex-direction: column; /* Ensure vertical flow */
     align-items: center;
-    justify-content: center;
-    padding: 0;
+    justify-content: center; /* Center if space allows */
+    padding: 20px 0; /* Add vertical padding */
     min-height: 70vh;
     background: radial-gradient(circle at 50% 50%, rgba(10, 132, 255, 0.05) 0%, transparent 60%);
+    overflow-y: auto; /* Allow internal scroll if needed */
 }
 
 .onboarding-wrapper {
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
-    overflow: hidden;
+    /* overflow: hidden;  <-- REMOVED to allow vertical scroll if needed */
     position: relative;
     padding-bottom: 40px;
 }
@@ -897,6 +899,7 @@ body {
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x; /* Critical for smooth swipe */
     user-select: none; /* Prevent text selection during swipe */
+    padding-bottom: 20px; /* Space for shadow/scroll */
 }
 
 .onboarding-slides::-webkit-scrollbar {

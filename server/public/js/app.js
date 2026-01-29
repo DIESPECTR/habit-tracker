@@ -153,10 +153,15 @@ const App = {
 
     // Haptic Feedback Helper
     vibrate() {
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
-        } else if (navigator.vibrate) {
-            navigator.vibrate(10); // Fallback
+        try {
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            } else if (navigator.vibrate) {
+                navigator.vibrate(10); // Fallback
+            }
+        } catch (e) {
+            // Ignore vibration errors to not break UI flow
+            console.warn('Vibrate failed', e);
         }
     },
 
