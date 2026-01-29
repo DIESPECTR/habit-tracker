@@ -429,6 +429,27 @@ const App = {
         }, 800); // Wait for CSS transition
     },
 
+    initOnboarding() {
+        if (this.onboardingObserver) return; // Already init
+        
+        const slides = document.getElementById('onboarding-slides');
+        const dots = document.querySelectorAll('.onboarding-pagination .dot');
+        
+        if (!slides || dots.length === 0) return;
+        
+        this.onboardingObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = Array.from(slides.children).indexOf(entry.target);
+                    dots.forEach(d => d.classList.remove('active'));
+                    if (dots[idx]) dots[idx].classList.add('active');
+                }
+            });
+        }, { threshold: 0.5, root: slides.parentElement });
+        
+        Array.from(slides.children).forEach(slide => this.onboardingObserver.observe(slide));
+    },
+
     render() {
         const habits = HabitStore.getAll();
         
@@ -444,7 +465,6 @@ const App = {
             const onboarding = document.getElementById('onboarding-section');
             if (onboarding) {
                 onboarding.style.display = 'flex';
-                // Attach event if not already attached (simple check)
                 const btnStart = document.getElementById('btn-start-onboarding');
                 if (btnStart) {
                     btnStart.onclick = () => {
@@ -452,6 +472,9 @@ const App = {
                         this.openHabitModal();
                     };
                 }
+                
+                // Initialize Carousel
+                setTimeout(() => this.initOnboarding(), 100);
             }
             return; // Stop rendering the rest
         }
@@ -459,7 +482,7 @@ const App = {
         // If habits exist -> Show main app, hide onboarding
         ['today-section', 'log-section', 'habits-section'].forEach(id => {
             const el = document.getElementById(id);
-            if (el) el.style.display = 'block'; // Or flex/block depending on css, usually block for sections
+            if (el) el.style.display = 'block'; 
         });
         document.getElementById('onboarding-section').style.display = 'none';
 

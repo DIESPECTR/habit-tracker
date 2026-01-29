@@ -173,6 +173,71 @@ const HabitStore = {
         return null;
     },
     
+    // Calculate current streak
+    getStreak(habit) {
+        const todayStr = this.getTodayStr();
+        const yesterday = new Date(this.strToDate(todayStr));
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = this.dateToStr(yesterday);
+        
+        let streak = 0;
+        let current = this.strToDate(todayStr);
+        
+        // If done today, start counting. If not, check yesterday.
+        if (habit.logs && habit.logs[todayStr]) {
+            streak++;
+            current.setDate(current.getDate() - 1);
+        } else if (habit.logs && habit.logs[yesterdayStr]) {
+            // Not done today, but done yesterday - streak is alive
+            current.setDate(current.getDate() - 1);
+        } else {
+            // Streak broken
+            return 0;
+        }
+        
+        // Count backwards
+        while (true) {
+            const dateStr = this.dateToStr(current);
+            if (habit.logs && habit.logs[dateStr]) {
+                streak++;
+                current.setDate(current.getDate() - 1);
+            } else {
+                // Check if we already counted this day (e.g. initial check)
+                // Actually my logic above is slightly flawed for loop.
+                // Let's simplify.
+                break;
+            }
+        }
+        
+        // Re-implement simpler logic
+        let count = 0;
+        let d = this.strToDate(todayStr);
+        
+        // Check today
+        if (habit.logs && habit.logs[this.dateToStr(d)]) {
+            count++;
+        } else {
+            // If not today, maybe yesterday?
+            d.setDate(d.getDate() - 1);
+            if (!(habit.logs && habit.logs[this.dateToStr(d)])) {
+                return 0; 
+            }
+            // If yesterday is done, count it and continue
+            count++;
+        }
+        
+        // Continue backwards from d-1
+        while (true) {
+            d.setDate(d.getDate() - 1);
+            if (habit.logs && habit.logs[this.dateToStr(d)]) {
+                count++;
+            } else {
+                break;
+            }
+        }
+        return count;
+    },
+
     // Calculate best streak
     getBestStreak(habit) {
         const dates = Object.keys(habit.logs).sort();
@@ -372,9 +437,26 @@ const HabitStore = {
     },
     
     // Reset all
-    reset() {
+    async reset() {
         localStorage.removeItem(this.STORAGE_KEY);
-        this.sync();
+        
+        // Force immediate sync to server (bypass debounce)
+        if (this.getTgInitData()) {
+            try {
+                await fetch(`${this.API_URL}/sync`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': this.getTgInitData()
+                    },
+                    body: JSON.stringify({ habits: [] })
+                });
+            } catch (e) {
+                console.error('Reset sync failed:', e);
+            }
+        }
+        
+        window.location.reload();
     },
     
     // Load demo data - DISABLED / CLEARED for Onboarding

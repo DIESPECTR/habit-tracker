@@ -869,110 +869,248 @@ body {
     cursor: pointer;
 }
 
-/* Onboarding */
+/* Onboarding Carousel */
 .onboarding-section {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    text-align: center;
-    min-height: 60vh;
+    padding: 0; /* Full width */
+    min-height: 70vh;
+    background: radial-gradient(circle at 50% 50%, rgba(10, 132, 255, 0.05) 0%, transparent 60%);
 }
 
-.onboarding-content {
+.onboarding-wrapper {
     width: 100%;
-    max-width: 320px;
+    max-width: 400px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 40px; /* Space for dots */
 }
 
-.onboarding-title {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+.onboarding-slides {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.onboarding-slides::-webkit-scrollbar {
+    display: none;
+}
+
+.onboarding-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    padding: 20px 40px;
+    box-sizing: border-box;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+    transform: scale(0.9);
+    transition: all 0.5s ease;
+}
+
+/* Active slide effect handled by IntersectionObserver in JS, but default behavior: */
+.onboarding-slide {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.onboarding-slide h2 {
+    font-size: 28px;
+    margin: 20px 0 10px;
+    background: linear-gradient(to right, #fff, #aaa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.onboarding-desc {
+.onboarding-slide p {
     font-size: 15px;
     color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 30px;
-    text-align: left;
-    background: var(--bg-card);
-    padding: 15px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    max-width: 280px;
 }
 
-.onboarding-desc strong {
-    color: var(--text-main);
-}
-
-.btn-large {
-    width: 100%;
-    padding: 16px;
-    font-size: 16px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-/* Fake UI Preview */
+/* Preview Cards */
 .preview-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
+    background: rgba(28, 28, 30, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 260px;
     padding: 0;
-    margin-bottom: 25px;
     overflow: hidden;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    margin-bottom: 10px;
+    transform: perspective(1000px) rotateX(5deg); /* 3D effect */
+    transition: transform 0.5s;
 }
 
-.preview-chart {
-    height: 100px;
-    width: 100%;
-    background: linear-gradient(180deg, rgba(41, 151, 255, 0.05) 0%, rgba(0,0,0,0) 100%);
-    position: relative;
+.onboarding-slide:nth-child(2) .preview-card {
+    transform: perspective(1000px) rotateY(-5deg);
 }
 
-.preview-wave {
-    width: 100%;
-    height: 100%;
-    display: block;
+.preview-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-align: left;
+    padding-left: 20px;
 }
 
 .preview-list {
     padding: 15px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    border-top: 1px solid var(--border);
+    gap: 12px;
 }
 
 .preview-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    opacity: 0.8;
+    gap: 12px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
 }
 
 .preview-icon {
-    font-size: 18px;
+    font-size: 20px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
 }
 
-.preview-line {
-    height: 8px;
-    background: var(--border);
-    border-radius: 4px;
+.preview-text {
     flex: 1;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .preview-check {
-    color: var(--accent-primary);
+    color: var(--success);
     font-weight: bold;
+    font-size: 16px;
+}
+
+/* Chart Preview */
+.preview-chart-container {
+    height: 160px;
+    position: relative;
+    background: linear-gradient(180deg, rgba(48, 209, 88, 0.05) 0%, transparent 100%);
+}
+
+.preview-stats {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0,0,0,0.3);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Orbit Logo Large */
+.preview-hero {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.orbit-logo-large {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.orbit-core {
+    position: absolute;
+    inset: 30px;
+    background: linear-gradient(135deg, #fff, #8E8E93);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(255,255,255,0.3);
+}
+
+.orbit-ring {
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--accent-cyan);
+    border-radius: 50%;
+    transform: rotate(45deg);
+    box-shadow: 0 0 20px var(--accent-cyan);
+    animation: spin 10s linear infinite;
+}
+
+.orbit-ring::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #fff;
+}
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.pulse-btn {
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px var(--accent-primary);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 20px var(--accent-primary); }
+    50% { transform: scale(1.05); box-shadow: 0 0 40px var(--accent-primary); }
+    100% { transform: scale(1); box-shadow: 0 0 20px var(--accent-primary); }
+}
+
+/* Pagination */
+.onboarding-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    opacity: 0.3;
+    transition: all 0.3s;
+}
+
+.dot.active {
+    background: #fff;
+    opacity: 1;
+    width: 20px;
+    border-radius: 4px;
 }
