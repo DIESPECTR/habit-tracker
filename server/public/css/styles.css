@@ -905,6 +905,7 @@ body {
 
 .onboarding-slide {
     flex: 0 0 100%;
+    min-width: 100%; /* Ensure full width on all browsers */
     scroll-snap-align: center;
     padding: 20px 40px;
     box-sizing: border-box;
@@ -917,6 +918,29 @@ body {
     opacity: 1;
     transform: scale(1);
 }
+
+/* Nav Arrows */
+.onboarding-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+}
+.onboarding-nav.prev { left: 10px; display: none; } /* Hide prev initially */
+.onboarding-nav.next { right: 10px; }
+
+/* ... existing code ... */
 
 .onboarding-slide h2 {
     font-size: 28px;

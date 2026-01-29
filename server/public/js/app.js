@@ -112,45 +112,13 @@ const App = {
             this.render();
         });
 
-        // PWA Service Worker Registration
+        /* Service Worker Disabled for Stability
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                console.log('Service Worker Registered');
-                
-                const showUpdate = () => {
-                    const toast = document.getElementById('update-toast');
-                    const btn = document.getElementById('btn-refresh');
-                    if (toast && btn) {
-                        toast.classList.add('show');
-                        btn.onclick = () => {
-                            if (reg.waiting) {
-                                reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-                            }
-                            window.location.reload();
-                        };
-                    }
-                };
-
-                // Check if there's an update waiting
-                if (reg.waiting) {
-                    showUpdate();
-                }
-                
-                reg.onupdatefound = () => {
-                    const newWorker = reg.installing;
-                    newWorker.onstatechange = () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            showUpdate();
-                        }
-                    };
-                };
+                // ... (code commented out)
             }).catch(err => console.error('SW Fail:', err));
-            
-            // Reload when controller changes (new SW activated)
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                window.location.reload();
-            });
         }
+        */
 
         // Auto-fix: Migrate to Neon Palette (One-time)
         if (!localStorage.getItem('migrated_neon_palette_v2')) {
@@ -429,6 +397,8 @@ const App = {
         
         const slides = document.getElementById('onboarding-slides');
         const dots = document.querySelectorAll('.onboarding-pagination .dot');
+        const prevBtn = document.getElementById('onboarding-prev');
+        const nextBtn = document.getElementById('onboarding-next');
         
         if (!slides || dots.length === 0) return;
         
@@ -436,8 +406,17 @@ const App = {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const idx = Array.from(slides.children).indexOf(entry.target);
+                    // Update Dots
                     dots.forEach(d => d.classList.remove('active'));
                     if (dots[idx]) dots[idx].classList.add('active');
+                    
+                    // Update Arrows
+                    if (prevBtn && nextBtn) {
+                        prevBtn.style.display = idx === 0 ? 'none' : 'flex';
+                        nextBtn.style.display = idx === slides.children.length - 1 ? 'none' : 'flex';
+                    }
+                    
+                    console.log(`Onboarding slide changed to: ${idx}`);
                 }
             });
         }, { threshold: 0.5, root: slides.parentElement });
@@ -453,6 +432,18 @@ const App = {
                 }
             });
         });
+        
+        // Add click events to arrows
+        if (prevBtn && nextBtn) {
+            prevBtn.onclick = () => {
+                this.vibrate();
+                slides.scrollBy({ left: -slides.offsetWidth, behavior: 'smooth' });
+            };
+            nextBtn.onclick = () => {
+                this.vibrate();
+                slides.scrollBy({ left: slides.offsetWidth, behavior: 'smooth' });
+            };
+        }
     },
 
     render() {
