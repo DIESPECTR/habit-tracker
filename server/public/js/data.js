@@ -34,13 +34,19 @@ const HabitStore = {
             
             if (response.ok) {
                 const data = await response.json();
-                if (data.habits && Array.isArray(data.habits)) {
-                    // Simple strategy: Server wins on startup
-                    // In a real app, you'd merge or check timestamps
+                const localData = this.getAll();
+
+                if (data.habits && Array.isArray(data.habits) && data.habits.length > 0) {
+                    // Server has data -> Overwrite local
+                    // (In a real app, you'd merge based on timestamps)
                     console.log('Downloaded data from server:', data.habits.length, 'habits');
                     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data.habits));
                     // Dispatch event to update UI if App is listening
                     window.dispatchEvent(new CustomEvent('habit-data-updated'));
+                } else if (localData.length > 0) {
+                     // Server is empty, but Local has data -> Push Local to Server
+                     console.log('Server empty, pushing local data...');
+                     this.sync(); 
                 }
             }
         } catch (e) {

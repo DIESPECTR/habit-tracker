@@ -12,6 +12,12 @@
     --danger: #FF453A;
 }
 
+html, body {
+    overscroll-behavior-y: none; /* Prevent pull-to-refresh / bounce */
+    touch-action: pan-x pan-y;
+    -webkit-tap-highlight-color: transparent; /* Remove gray tap box */
+}
+
 body {
     background-color: var(--bg-app);
     color: var(--text-main);

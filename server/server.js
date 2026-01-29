@@ -14,6 +14,15 @@ app.use(express.static('public'));
 // Data Directory
 const DATA_DIR = path.join(__dirname, 'data');
 
+// Ensure Data Directory Exists
+(async () => {
+    try {
+        await fs.mkdir(DATA_DIR, { recursive: true });
+    } catch (e) {
+        console.error('Failed to create data dir:', e);
+    }
+})();
+
 // --- Middleware: Verify Telegram Auth ---
 const verifyTelegramAuth = (req, res, next) => {
     const initData = req.headers['authorization'];

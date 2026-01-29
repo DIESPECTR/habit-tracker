@@ -190,8 +190,10 @@ const App = {
 
     // Haptic Feedback Helper
     vibrate() {
-        if (navigator.vibrate) {
-            navigator.vibrate(10); // Light tap
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        } else if (navigator.vibrate) {
+            navigator.vibrate(10); // Fallback
         }
     },
 
@@ -342,6 +344,44 @@ const App = {
             tab.addEventListener('click', () => {
                 this.switchHabitsView(tab.dataset.view);
             });
+        });
+
+        // --- Event Delegation for Habits Grid (Fix for dynamic elements) ---
+        const grid = document.getElementById('habits-grid');
+        grid.addEventListener('click', (e) => {
+            // 1. Check Button
+            const btn = e.target.closest('.habit-check-btn');
+            if (btn) {
+                e.stopPropagation();
+                this.vibrate();
+                const habitId = btn.dataset.habit;
+                const dateStr = btn.dataset.date;
+                HabitStore.toggleDay(habitId, dateStr);
+                this.render();
+                this.checkCompletion();
+                return;
+            }
+
+            // 2. Check Day Column (Dot)
+            const col = e.target.closest('.habit-day-col');
+            if (col) {
+                e.stopPropagation();
+                this.vibrate();
+                const habitId = col.dataset.habit;
+                const dateStr = col.dataset.date;
+                HabitStore.toggleDay(habitId, dateStr);
+                this.render();
+                this.checkCompletion();
+                return;
+            }
+
+            // 3. Check Card (Edit)
+            const card = e.target.closest('.habit-card');
+            if (card) {
+                const habitId = card.dataset.id;
+                this.vibrate();
+                this.openHabitModal(habitId);
+            }
         });
         
         // Log view tabs
@@ -638,40 +678,6 @@ const App = {
                 </div>
             `;
         }).join('');
-        
-        // Bind click events
-        container.querySelectorAll('.habit-check-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.vibrate();
-                const habitId = e.target.dataset.habit;
-                const dateStr = e.target.dataset.date;
-                HabitStore.toggleDay(habitId, dateStr);
-                this.render();
-                this.checkCompletion();
-            });
-        });
-        
-        container.querySelectorAll('.habit-day-col').forEach(col => {
-            col.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.vibrate();
-                const habitId = e.target.dataset.habit;
-                const dateStr = e.target.dataset.date;
-                HabitStore.toggleDay(habitId, dateStr);
-                this.render();
-                this.checkCompletion();
-            });
-        });
-        
-        container.querySelectorAll('.habit-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                // Ignore clicks that originated from buttons or day cols (already handled via stopPropagation, but safe check)
-                if (e.target.closest('.habit-check-btn') || e.target.closest('.habit-day-col')) return;
-                const habitId = card.dataset.id;
-                this.openHabitModal(habitId);
-            });
-        });
     },
 
     renderCalendar() {
